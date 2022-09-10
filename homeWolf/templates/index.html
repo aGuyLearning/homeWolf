@@ -19,7 +19,7 @@
         });
       
         $('#sendbutton').on('click', function() {
-          console.log(socket.callback('set_config',{'a b': 2}));
+          socket.emit('set_config',{'a b': 2});
           
         });
 
