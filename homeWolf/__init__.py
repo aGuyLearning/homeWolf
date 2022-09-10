@@ -23,11 +23,12 @@ def create_app():
 
     @socketio.on('join_game')
     def join_game(name):
-        if game.players is Empty:
+        if not game.players:
             game.handle_player_connection(name,request.sid,role='teller')
+            print(game.teller)
         else:
             game.handle_player_connection(name,request.sid)
-        print(game.players[name])
+        socketio.emit('get_role', game.players[name]['role'])
 
 
     @socketio.on('get_config')
@@ -50,9 +51,10 @@ def create_app():
     @socketio.on('start_game')
     def start_game():
         # check if number of players is reached, excluding the 
-        if game.config['spieler'] != len(game.players.keys()) -1:
+        if game.config['spieler'] == len(game.players.keys()) -1:
             game.current_phase = 'start'
             game.start_game()
+            print('start')
 
 
     @app.route('/')
