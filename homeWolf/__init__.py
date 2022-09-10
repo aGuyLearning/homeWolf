@@ -1,8 +1,8 @@
 from queue import Empty
 from socket import socket
 from flask import Flask, request, render_template
-from flask_socketio import SocketIO, send, emit
-import json
+from flask_socketio import SocketIO,  emit
+from flask_cors import CORS
 
 from homeWolf.game import Game
 
@@ -11,8 +11,9 @@ game = None
 
 def create_app():
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True,
-                template_folder='templates')
+    app = Flask(__name__, instance_relative_config=True,template_folder='templates')
+    cors = CORS(app, resources={r"/api/*" : {"origins": "*"}})
+
     app.config.from_mapping(
         SECRET_KEY='dev',  # change for deployment
     )
@@ -30,19 +31,19 @@ def create_app():
         else:
             game.handle_player_connection(name,request.sid)
         print(game.players[name])
-    
 
-   
 
     @socketio.on('get_config')
     def config():
         print(request.method)
         emit('get_config', game.config)
     
+
     @socketio.on('set_config')
     def set_config(config):
         game.config = config
         game.print_config()
+
 
     @socketio.on('remove_player')
     def remove_player(name):
@@ -54,14 +55,13 @@ def create_app():
         # check if number of players is reached, excluding the 
         if game.config['spieler'] != len(game.players.keys()) -1:
             game.current_phase = 'start'
-            # TODO start game loop
-
-
+            game.start_game()
 
 
     @app.route('/')
     def index():
         return render_template('index.html')
+
 
     socketio.on('vote')
     def vote(vote):

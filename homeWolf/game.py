@@ -35,11 +35,17 @@ class Game:
         self.players = {}
 
 
+    def start_game(self):
+        
+        pass
     def print_config(self):
         print(self.config)
     
+
     def player_is_in_game(self,name):
         return name in self.players.keys()
+
+
     def handle_player_connection(self, name, sid, role='player'):
         print(self.player_is_in_game(name))
         if not self.player_is_in_game(name) and self.current_phase == 'lobby':
