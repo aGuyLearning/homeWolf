@@ -2,6 +2,7 @@ from queue import Empty
 from socket import socket
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO,  emit
+from flask_cors import CORS
 
 from homeWolf.game import Game
 
@@ -11,7 +12,7 @@ game = None
 def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True,template_folder='templates')
-
+    CORS(app)
     app.config.from_mapping(
         SECRET_KEY='dev',  # change for deployment
     )
