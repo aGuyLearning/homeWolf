@@ -2,17 +2,15 @@ from queue import Empty
 from socket import socket
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO,  emit
-from flask_cors import CORS
 
 from homeWolf.game import Game
 
-socketio = SocketIO()
+socketio = SocketIO(cors_allowed_origins="*")
 game = None
 
 def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True,template_folder='templates')
-    cors = CORS(app, resources={r"/api/*" : {"origins": "*"}})
 
     app.config.from_mapping(
         SECRET_KEY='dev',  # change for deployment
