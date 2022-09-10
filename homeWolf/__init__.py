@@ -12,7 +12,6 @@ game = None
 def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True,template_folder='templates')
-    CORS(app)
     app.config.from_mapping(
         SECRET_KEY='dev',  # change for deployment
     )
