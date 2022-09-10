@@ -5,7 +5,7 @@ from flask_socketio import SocketIO,  emit
 
 from homeWolf.game import Game
 
-socketio = SocketIO(cors_allowed_origins="*")
+socketio = SocketIO(cors_allowed_origins="127.0.0.1:4200")
 game = None
 
 def create_app():
