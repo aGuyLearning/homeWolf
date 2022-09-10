@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      $(document).ready(function() {
+      
+        var socket = io.connect('http://127.0.0.1:5000');
+        socket.on('connect', function(){
+          socket.emit('join_game', 'carl')
+        })
+        
+        socket.on('get_config', function(config) {
+          $("#messages").append('<li>'+JSON.stringify(config)+'</li>');
+          console.log('Received message');
+        });
+      
+        $('#sendbutton').on('click', function() {
+          console.log(socket.callback('set_config',{'a b': 2}));
+          
+        });
+
+        $('#getbutton').on('click', function(){
+          socket.emit('get_config')
+        })
+      
+      });
+      </script>
+      <ul id="messages"></ul>
+      <button id="sendbutton">Send</button>
+      <button id="getbutton">Get</button>
+  </body>
+</html>
