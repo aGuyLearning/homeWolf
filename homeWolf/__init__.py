@@ -12,7 +12,7 @@ def emit_player_dict(broadast=True):
     player_names.remove(game.teller)
     
     socketio.emit(
-            "broadcast_players_dict",
+            "get_players_dict",
             [{'name': k, 'figure': game.players[k]['figure']} for k in player_names],
             broadcast=broadast
          )
