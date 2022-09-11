@@ -15,6 +15,17 @@ Config hat folgende Keys:
     }
 '''
 
+'''
+Phases:
+1. lobby
+2. setup
+3. vote_leader
+4. prepare_night
+    ... (depends on figures in play)
+wake_up (declare dead)
+vote_death
+'''
+
 class Game:
     def __init__(self) -> None:
         self.config = {
@@ -36,8 +47,13 @@ class Game:
 
 
     def start_game(self):
+        self.current_phase = 'setup'
+        self._setup()
+
         
-        pass
+    def _setup():
+        print("setting up game with \n{game.players}")
+
     def print_config(self):
         print(self.config)
     
@@ -51,7 +67,8 @@ class Game:
         if not self.player_is_in_game(name) and self.current_phase == 'lobby':
             self.players[name] = {
                     'role': role,
-                    'sid': sid
+                    'sid': sid,
+                    'figure': ""
                 }
             if role == 'teller':
                 self.teller = name
@@ -59,5 +76,5 @@ class Game:
             self.players[name]['sid'] = sid
     
     def remove_player(self,name):
-        if self.player_is_in_game(name):
+        if self.player_is_in_game(name) and self.current_phase == 'lobby':
             del self.players[name]

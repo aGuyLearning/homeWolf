@@ -1,5 +1,4 @@
-from queue import Empty
-from socket import socket
+from operator import countOf
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO,  emit
 
@@ -29,6 +28,7 @@ def create_app():
         else:
             game.handle_player_connection(name,request.sid)
         socketio.emit('get_role', game.players[name]['role'])
+        socketio.emit("broadcast_num_players", len(game.players) -1 ,broadcast=True )
 
 
     @socketio.on('get_config')
@@ -51,10 +51,11 @@ def create_app():
     @socketio.on('start_game')
     def start_game():
         # check if number of players is reached, excluding the 
-        if game.config['spieler'] == len(game.players.keys()) -1:
+        if game.config['spieler'] == len(game.players.keys()) -1 :
             game.current_phase = 'start'
             game.start_game()
-            print('start')
+        socketio.emit('get_phase', game.current_phase, broadcast=True)
+        
 
 
     @app.route('/')
