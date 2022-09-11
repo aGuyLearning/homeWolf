@@ -7,6 +7,17 @@ from homeWolf.game import Game
 socketio = SocketIO(cors_allowed_origins="*")
 game = None
 
+def emit_player_dict(broadast=True):
+    player_names = list(game.players.keys())
+    player_names.remove(game.teller)
+    
+    socketio.emit(
+            "broadcast_players_dict",
+            [{'name': k, 'figure': game.players[k]['figure']} for k in player_names],
+            broadcast=broadast
+         )
+
+
 def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True,template_folder='templates')
@@ -28,12 +39,15 @@ def create_app():
         else:
             game.handle_player_connection(name,request.sid)
         socketio.emit('get_role', game.players[name]['role'])
-        socketio.emit(
-            "broadcast_players_dict",
-            [{'name': k, 'figure': game.players[k]['figure']} for k in set(list(game.players.keys())) - set(game.teller)],
-            broadcast=True
-         )
+        emit_player_dict(broadast=True)
 
+    @socketio.on('get_players_dict')
+    def get_players_dict():
+        emit_player_dict()
+
+    @socketio.on('get_role')
+    def get_role(name):
+        socketio.emit('get_role', game.players[name]['role'])
 
     @socketio.on('get_config')
     def config():
@@ -50,11 +64,7 @@ def create_app():
     @socketio.on('remove_player')
     def remove_player(name):
         game.remove_player(name)
-        socketio.emit(
-            "broadcast_players_dict",
-            [{'name': k, 'figure': game.players[k]['figure']} for k in set(list(game.players.keys())) - set(game.teller)],
-            broadcast=True
-         )
+        emit_player_dict()
 
 
     @socketio.on('start_game')
