@@ -28,7 +28,11 @@ def create_app():
         else:
             game.handle_player_connection(name,request.sid)
         socketio.emit('get_role', game.players[name]['role'])
-        socketio.emit("broadcast_num_players", len(game.players) -1 ,broadcast=True )
+        socketio.emit(
+            "broadcast_num_players",
+            {k: game.players[k]['figure'] for k in set(list(game.players.keys())) - set(game.teller)},
+            broadcast=True
+         )
 
 
     @socketio.on('get_config')
@@ -46,6 +50,11 @@ def create_app():
     @socketio.on('remove_player')
     def remove_player(name):
         game.remove_player(name)
+        socketio.emit(
+            "broadcast_num_players",
+            {k: game.players[k]['figure'] for k in set(list(game.players.keys())) - set(game.teller)},
+            broadcast=True
+         )
 
 
     @socketio.on('start_game')
