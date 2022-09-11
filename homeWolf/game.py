@@ -32,14 +32,14 @@ class Game:
             'spieler': 7,
             'werwoelfe': 2,
             'anonymeAbstimmung': False,
-            'maedchen': True,
+            'maedchen': False,
             'mystiker': False,
-            'amor': True,
-            'hexe': True,
+            'amor': False,
+            'hexe': False,
             'jaeger': False,
             'dieb': False,
             'dorfdepp': False,
-            'seherin': True
+            'seherin': False
         }
         self.current_phase = 'lobby'
         self.teller = "";
