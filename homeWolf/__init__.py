@@ -29,7 +29,7 @@ def create_app():
             game.handle_player_connection(name,request.sid)
         socketio.emit('get_role', game.players[name]['role'])
         socketio.emit(
-            "broadcast_num_players",
+            "broadcast_players_dict",
             {k: game.players[k]['figure'] for k in set(list(game.players.keys())) - set(game.teller)},
             broadcast=True
          )
