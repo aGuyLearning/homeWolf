@@ -51,7 +51,7 @@ def create_app():
     def remove_player(name):
         game.remove_player(name)
         socketio.emit(
-            "broadcast_num_players",
+            "broadcast_players_dict",
             {k: game.players[k]['figure'] for k in set(list(game.players.keys())) - set(game.teller)},
             broadcast=True
          )

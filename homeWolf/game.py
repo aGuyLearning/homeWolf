@@ -52,7 +52,7 @@ class Game:
 
         
     def _setup(self):
-        print("setting up game with \n{game.players}")
+        print(f"setting up game with: \n{self.players}")
 
     def print_config(self):
         print(self.config)
