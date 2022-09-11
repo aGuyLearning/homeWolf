@@ -30,7 +30,7 @@ def create_app():
         socketio.emit('get_role', game.players[name]['role'])
         socketio.emit(
             "broadcast_players_dict",
-            {k: game.players[k]['figure'] for k in set(list(game.players.keys())) - set(game.teller)},
+            [{'name': k, 'figure': game.players[k]['figure']} for k in set(list(game.players.keys())) - set(game.teller)],
             broadcast=True
          )
 
@@ -52,7 +52,7 @@ def create_app():
         game.remove_player(name)
         socketio.emit(
             "broadcast_players_dict",
-            {k: game.players[k]['figure'] for k in set(list(game.players.keys())) - set(game.teller)},
+            [{'name': k, 'figure': game.players[k]['figure']} for k in set(list(game.players.keys())) - set(game.teller)],
             broadcast=True
          )
 
